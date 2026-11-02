@@ -2,6 +2,8 @@
 
 A mobile-first web app that helps volunteer-run food groups move a weekly food-bank order from the loading dock to people's hands. It started as an internal tool for a mutual-aid food group and has been sanitized for public contribution.
 
+**Live demo:** <https://food-distribution-tracker-demo.netlify.app> (fake data in a shared demo database that anyone can edit, so expect other people's changes; it may be reset at any time).
+
 > **All group names, partner names, people, quantities, and data in this repo are placeholders** (for example "Co-op A", "Partner Group 3", "Food Bank"). Nothing here refers to real organizations or people. Bring your own groups and your own Supabase project.
 
 ## What it does
