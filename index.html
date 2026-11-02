@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Food Tracker</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#059669">
+    <meta name="description" content="Food distribution tracking and volunteer coordination for community food groups">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Food Tracker">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png">
+    
+    <!-- Fonts: Inter for UI, IBM Plex Mono for quantities -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app" role="main" aria-label="Food Tracker Application" class="main-content">
+        <noscript>
+            <div style="text-align: center; padding: 20px; background: #fff3cd; color: #856404; border-radius: 8px; margin: 20px;">
+                <h2>JavaScript Required</h2>
+                <p>This application requires JavaScript to function properly. Please enable JavaScript in your browser settings.</p>
+            </div>
+        </noscript>
+    </div>
+    
+    <script type="module" src="/src/main.tsx"></script>
+</body>
+</html>

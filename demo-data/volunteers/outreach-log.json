@@ -1,0 +1,14 @@
+[
+  {
+    "id": "00000000-0000-4000-8000-000000000001",
+    "contact_name": "Pat Nguyen",
+    "contact_type": "pipeline",
+    "touch_date": "2025-12-20",
+    "channel": "text",
+    "direction": "outbound",
+    "summary": "Asked if Pat could help on Saturday; said maybe after the holidays.",
+    "next_touch_date": "2026-01-05",
+    "next_touch_action": "Check in again after New Year",
+    "logged_at": "2025-12-20T18:00:00.000Z"
+  }
+]

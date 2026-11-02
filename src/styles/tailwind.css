@@ -1,0 +1,291 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Warm "paper" substrate — a mutual-aid warmth move, not pure white */
+  --background: 48 33% 97%;          /* #FBFAF6 paper */
+  --foreground: 234 35% 9%;          /* #0E1020 ink (cool near-black) */
+  --card: 0 0% 100%;                 /* cards stay bright white on paper */
+  --card-foreground: 234 35% 9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 234 35% 9%;
+  --primary: 242 100% 64%;           /* #4F46FF indigo */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 47 91% 55%;           /* #F5C422 saffron */
+  --secondary-foreground: 45 100% 5%;
+  --muted: 225 16% 96%;              /* #F0F2F6 slate-100 */
+  --muted-foreground: 230 10% 46%;   /* #6B6F82 slate-500 */
+  --accent: 225 16% 96%;
+  --accent-foreground: 234 15% 24%;
+  --destructive: 347 77% 50%;        /* #E11D48 rose */
+  --destructive-foreground: 0 0% 100%;
+  --border: 224 14% 90%;             /* #E2E5EC slate-200 */
+  --input: 224 14% 90%;
+  --ring: 242 100% 64%;
+  --radius: 0.875rem;                /* 14px — one step warmer than 12px */
+
+  /* Pastel tone system — the signature. Do not replace. */
+  --tone-lavender-bg: #E9DEFF;
+  --tone-lavender-border: #D8CBFF;
+  --tone-lavender-text: #5B44C3;
+  --tone-mint-bg: #E9FFF4;
+  --tone-mint-border: #A7F0CA;
+  --tone-mint-text: #0F7A4F;
+  --tone-peach-bg: #FFF4ED;
+  --tone-peach-border: #FFCFAC;
+  --tone-peach-text: #B75A28;
+
+  /* Brand accents used outside the Shadcn token system */
+  --indigo-soft: #E8E6FF;
+  --indigo-deep: #3B33D4;
+  --saffron-soft: #FFF5D1;
+  --saffron-deep: #C99B00;
+
+  /* Layered shadows with a warm-ink tint */
+  --shadow-s1: 0 1px 2px rgba(14, 16, 32, 0.06), 0 1px 1px rgba(14, 16, 32, 0.04);
+  --shadow-s2: 0 4px 16px rgba(14, 16, 32, 0.06), 0 1px 2px rgba(14, 16, 32, 0.04);
+  --shadow-s3: 0 18px 40px rgba(14, 16, 32, 0.14), 0 2px 8px rgba(14, 16, 32, 0.06);
+
+  /* Type stacks — Inter for UI, IBM Plex Mono for lined-up quantities */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+.dark {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 246 100% 61%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --ring: 246 100% 61%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body,
+  #app {
+    @apply h-full;
+  }
+
+  body {
+    @apply overflow-hidden bg-background text-foreground;
+  }
+}
+
+/* Compact Mode - Reduces spacing by ~25% */
+.compact-mode {
+  /* Reduce card padding */
+  .rounded-3xl,
+  .rounded-\[32px\],
+  .rounded-\[24px\] {
+    @apply rounded-2xl;
+  }
+
+  /* Reduce gaps between elements */
+  .space-y-4 > *:not(:first-child) {
+    margin-top: 0.75rem !important; /* 12px instead of 16px */
+  }
+
+  .space-y-6 > *:not(:first-child) {
+    margin-top: 1rem !important; /* 16px instead of 24px */
+  }
+
+  .gap-4 {
+    gap: 0.75rem !important;
+  }
+
+  .gap-6 {
+    gap: 1rem !important;
+  }
+
+  /* Reduce padding on cards and sections */
+  .p-4 {
+    padding: 0.75rem !important;
+  }
+
+  .p-6 {
+    padding: 1rem !important;
+  }
+
+  .px-4 {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  .py-4 {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+
+  .py-6 {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  /* Reduce button heights */
+  .h-12 {
+    height: 2.5rem !important;
+  }
+
+  .h-10 {
+    height: 2.25rem !important;
+  }
+
+  /* Reduce header height */
+  header {
+    @apply h-[52px];
+  }
+
+  /* Reduce text sizes slightly */
+  .text-base {
+    font-size: 0.9375rem !important; /* 15px instead of 16px */
+  }
+
+  .text-lg {
+    font-size: 1.0625rem !important; /* 17px instead of 18px */
+  }
+}
+
+/* Sync-state breathing — the calm version of "pulse". The design rationale:
+   sync state breathes; it does not spin. Spin reads as anxious. */
+@keyframes pulse-breathe {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 currentColor;
+  }
+  50% {
+    opacity: 0.82;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0);
+  }
+}
+.pulse-breathe {
+  animation: pulse-breathe 2.4s ease-in-out infinite;
+}
+
+/* Tutorial Animations */
+@keyframes tutorial-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.6),
+                0 0 0 4px rgba(99, 102, 241, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5),
+                0 0 0 6px rgba(99, 102, 241, 0.2);
+  }
+}
+
+@keyframes tutorial-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tutorial-success-pop {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.tutorial-highlight {
+  animation: tutorial-pulse 2s ease-in-out infinite;
+}
+
+.tutorial-fade-in {
+  animation: tutorial-fade-in 0.3s ease-out forwards;
+}
+
+.tutorial-success-pop {
+  animation: tutorial-success-pop 0.4s ease-out forwards;
+}
+
+/* Wrong click feedback - shake animation */
+@keyframes tutorial-shake {
+  0%, 100% { transform: translateX(0); }
+  15%, 45%, 75% { transform: translateX(-6px); }
+  30%, 60%, 90% { transform: translateX(6px); }
+}
+
+.tutorial-shake {
+  animation: tutorial-shake 0.5s ease-in-out;
+}
+
+/* Tutorial instruction card - fixed at bottom */
+.tutorial-instruction-card {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1001;
+  padding: 16px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(to top, white 85%, transparent);
+  pointer-events: auto;
+}
+
+@media (min-width: 640px) {
+  .tutorial-instruction-card {
+    bottom: 24px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    max-width: 420px;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25),
+                0 0 0 1px rgba(0, 0, 0, 0.05);
+  }
+}
+
+/* Tutorial modal overlay */
+.tutorial-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 24px;
+}
+
+.tutorial-modal {
+  background: white;
+  border-radius: 32px;
+  max-width: 400px;
+  width: 100%;
+  padding: 32px;
+  text-align: center;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}

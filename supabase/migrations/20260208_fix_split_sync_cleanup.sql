@@ -1,0 +1,9 @@
+-- Fix BUG-2/BUG-3: Split sync doesn't clean up destination allocations
+--
+-- Problem: sync_splits_to_destination_allocations only UPSERTs. When a
+-- destination is removed from splits (or splits are cleared entirely),
+-- the Partner 11/Partner 10 allocation rows persist as orphans.
+--
+-- Fix: After upserting active splits, DELETE destination allocations
+-- for custom destinations (is_custom=true) that are no longer in splits.
+-- See full function body in Supabase migration history.

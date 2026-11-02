@@ -1,0 +1,17 @@
+[
+  {
+    "id": "00000000-0000-4000-8000-0000000000c1",
+    "shift_date": "2025-12-27",
+    "shift_type": "saturday-distro",
+    "shift_label": "Saturday distro",
+    "original_assignee": "Casey Morgan",
+    "reason": "Out of town",
+    "status": "open",
+    "candidates": ["Riley Chen", "Taylor Brooks"],
+    "filled_by": null,
+    "priority": "medium",
+    "notes": "Demo coverage request",
+    "created_at": "2025-12-20T18:00:00.000Z",
+    "last_updated": "2025-12-20T18:00:00.000Z"
+  }
+]

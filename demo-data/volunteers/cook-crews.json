@@ -1,0 +1,17 @@
+{
+  "coop_a": {
+    "name": "Co-op A",
+    "current_lead": "Quinn Harper",
+    "lead_status": "active",
+    "summer_lead": null,
+    "summer_lead_notes": null,
+    "fall_lead": null,
+    "fall_lead_notes": null,
+    "additional_contacts": [],
+    "partner_orgs": [],
+    "handoff_strategy": "Demo placeholder",
+    "summer_plan": "Demo placeholder",
+    "open_questions": [],
+    "last_updated": "2025-12-20"
+  }
+}
