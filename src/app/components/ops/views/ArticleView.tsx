@@ -197,17 +197,28 @@ const ArticleView: React.FC = () => {
         );
       } else if (earliest.type === 'link') {
         const href = earliest.match[2];
+        // Only http(s), mailto, and relative links become anchors; javascript:/data: render as plain text
+        let safe = false;
+        try {
+          safe = ['http:', 'https:', 'mailto:'].includes(new URL(href, window.location.origin).protocol);
+        } catch {
+          safe = false;
+        }
         const isExternal = href.startsWith('http');
         parts.push(
-          <a
-            key={key++}
-            href={href}
-            target={isExternal ? '_blank' : undefined}
-            rel={isExternal ? 'noopener noreferrer' : undefined}
-            className="text-emerald-600 hover:text-emerald-700 underline"
-          >
-            {earliest.match[1]}
-          </a>
+          safe ? (
+            <a
+              key={key++}
+              href={href}
+              target={isExternal ? '_blank' : undefined}
+              rel={isExternal ? 'noopener noreferrer' : undefined}
+              className="text-emerald-600 hover:text-emerald-700 underline"
+            >
+              {earliest.match[1]}
+            </a>
+          ) : (
+            <span key={key++}>{earliest.match[1]}</span>
+          )
         );
       } else if (earliest.type === 'code') {
         parts.push(
