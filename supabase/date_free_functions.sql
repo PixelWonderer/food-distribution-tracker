@@ -1,5 +1,7 @@
 -- Date-free database functions for Food Tracker
--- Run these in your Supabase SQL Editor to eliminate date-based filtering
+-- Run these in your Supabase SQL Editor (setup step 6, after the migrations) to eliminate
+-- date-based filtering. The app reads the CURRENT week as MAX(orders.week_date).
+-- custom_items.inventory_item_id comes from migrations/20260121_c_link_custom_items_to_inventory.sql.
 
 -- Drop existing functions first to allow type changes
 DROP FUNCTION IF EXISTS get_all_week_data();
@@ -80,7 +82,8 @@ RETURNS TABLE (
   quantity NUMERIC,
   unit TEXT,
   is_packed BOOLEAN,
-  added_by TEXT
+  added_by TEXT,
+  inventory_item_id UUID
 )
 LANGUAGE plpgsql
 AS $$
@@ -94,7 +97,8 @@ BEGIN
     ci.quantity,
     COALESCE(ci.unit, 'items') as unit,
     COALESCE(ci.is_packed, false) as is_packed,
-    ci.added_by
+    ci.added_by,
+    ci.inventory_item_id
   FROM custom_items ci
   JOIN destinations d ON d.id = ci.destination_id
   WHERE ci.week_date = (

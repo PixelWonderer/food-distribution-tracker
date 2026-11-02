@@ -1,63 +1,36 @@
--- Enable anonymous access for testing
--- Run this after the main RLS policies
+-- Enable anonymous access for demos and testing.
+-- Run this LAST, after the main RLS policies, migrations and seeds.
+--
+-- WARNING: this lets anyone holding the anon key read AND write every table in the
+-- public schema. That is intentional for a public demo; do not use it for real data.
+-- Tighten (or skip) it for a production deployment.
+--
+-- The app reads and writes every table with the anon key (there is no sign-in), so rather
+-- than listing tables one by one this enables RLS (if needed) and adds a single permissive
+-- policy per public table. It is idempotent, and picks up tables added by later migrations.
 
--- Allow anonymous users to read destinations
-CREATE POLICY "Allow anon read destinations" ON destinations
-  FOR SELECT USING (true);
+DO $$
+DECLARE
+  t RECORD;
+BEGIN
+  FOR t IN
+    SELECT tablename FROM pg_tables WHERE schemaname = 'public'
+  LOOP
+    EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY', t.tablename);
+    EXECUTE format('DROP POLICY IF EXISTS "Allow anon full access" ON public.%I', t.tablename);
+    EXECUTE format(
+      'CREATE POLICY "Allow anon full access" ON public.%I FOR ALL TO anon, authenticated USING (true) WITH CHECK (true)',
+      t.tablename
+    );
+  END LOOP;
+END $$;
 
--- Allow anonymous users to read orders
-CREATE POLICY "Allow anon read orders" ON orders
-  FOR SELECT USING (true);
+-- Make sure the anon role can use the tables, sequences and RPC functions
+-- (Supabase grants these by default; this is a no-op there but fixes hand-built databases).
+GRANT USAGE ON SCHEMA public TO anon, authenticated;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO anon, authenticated;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated;
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO anon, authenticated;
 
--- Allow anonymous users to read allocations  
-CREATE POLICY "Allow anon read allocations" ON allocations
-  FOR SELECT USING (true);
-
--- Allow anonymous users to read tracking
-CREATE POLICY "Allow anon read storage_tracking" ON storage_tracking
-  FOR SELECT USING (true);
-
-CREATE POLICY "Allow anon read distribution_tracking" ON distribution_tracking
-  FOR SELECT USING (true);
-
--- Allow anonymous users to read custom items
-CREATE POLICY "Allow anon read custom_items" ON custom_items
-  FOR SELECT USING (true);
-
--- Allow anonymous users to read supplies
-CREATE POLICY "Allow anon read supplies" ON supplies
-  FOR SELECT USING (true);
-
--- For testing, also allow anonymous writes (remove in production)
-CREATE POLICY "Allow anon insert orders" ON orders
-  FOR INSERT WITH CHECK (true);
-
-CREATE POLICY "Allow anon update orders" ON orders
-  FOR UPDATE USING (true);
-
-CREATE POLICY "Allow anon insert allocations" ON allocations
-  FOR INSERT WITH CHECK (true);
-
-CREATE POLICY "Allow anon update allocations" ON allocations
-  FOR UPDATE USING (true);
-
-CREATE POLICY "Allow anon insert storage_tracking" ON storage_tracking
-  FOR INSERT WITH CHECK (true);
-
-CREATE POLICY "Allow anon update storage_tracking" ON storage_tracking
-  FOR UPDATE USING (true);
-
-CREATE POLICY "Allow anon insert distribution_tracking" ON distribution_tracking
-  FOR INSERT WITH CHECK (true);
-
-CREATE POLICY "Allow anon update distribution_tracking" ON distribution_tracking
-  FOR UPDATE USING (true);
-
-CREATE POLICY "Allow anon insert custom_items" ON custom_items
-  FOR INSERT WITH CHECK (true);
-
-CREATE POLICY "Allow anon update custom_items" ON custom_items
-  FOR UPDATE USING (true);
-
-CREATE POLICY "Allow anon delete custom_items" ON custom_items
-  FOR DELETE USING (true);
+-- Refresh the PostgREST schema cache
+NOTIFY pgrst, 'reload schema';

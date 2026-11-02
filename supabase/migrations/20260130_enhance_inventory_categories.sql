@@ -102,10 +102,28 @@ COMMENT ON FUNCTION take_inventory_item IS
 -- 4. Update inventory_items_view to include subcategory
 -- ============================================
 
-CREATE OR REPLACE VIEW inventory_items_view AS
+-- Drop first: the view's column list changed since 20260124 (and i.* would now
+-- duplicate item_name, which 20260123 added to inventory_items).
+DROP VIEW IF EXISTS inventory_items_view;
+
+CREATE VIEW inventory_items_view AS
 SELECT
-  i.*,
-  COALESCE(i.custom_name, o.item_name) as item_name,
+  i.id,
+  i.order_id,
+  i.custom_name,
+  i.current_quantity,
+  i.low_stock_threshold,
+  i.unit_of_measure,
+  i.category,
+  i.subcategory,
+  i.storage_location,
+  i.emoji,
+  i.last_updated_at,
+  i.last_updated_by,
+  i.created_at,
+  i.is_active,
+  i.is_packed,
+  COALESCE(i.custom_name, i.item_name, o.item_name) as item_name,
   i.current_quantity <= i.low_stock_threshold as is_low_stock,
   EXISTS (
     SELECT 1 FROM order_suggestions s

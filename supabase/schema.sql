@@ -20,9 +20,11 @@ CREATE TABLE orders (
   item_name TEXT NOT NULL,
   quantity NUMERIC(12,4) NOT NULL,
   unit TEXT,
-  storage_type TEXT,
+  storage_type TEXT CHECK (storage_type IN ('Pantry', 'Fridge', 'Both')), -- NULL allowed
+  ran_out BOOLEAN DEFAULT false, -- set when the Food Bank ran out of the item
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+  CHECK (quantity >= 0),
   UNIQUE(week_date, item_name) -- Prevent duplicate items per week
 );
 
@@ -36,6 +38,10 @@ CREATE TABLE destinations (
   is_direct BOOLEAN DEFAULT false,
   sheet_column_index INTEGER DEFAULT -1,
   display_order INTEGER DEFAULT 0,
+  is_active BOOLEAN DEFAULT true,
+  default_timing TEXT, -- baseline timing; reset_destination_timings() restores it
+  is_custom BOOLEAN DEFAULT false, -- true for destinations created in the app
+  created_by TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
 );
@@ -45,7 +51,8 @@ CREATE TABLE allocations (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
   destination_id UUID NOT NULL REFERENCES destinations(id) ON DELETE CASCADE,
-  allocated_quantity NUMERIC(12,4) NOT NULL,
+  allocated_quantity NUMERIC(12,4) NOT NULL CHECK (allocated_quantity >= 0),
+  is_distributed BOOLEAN DEFAULT false,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
   UNIQUE(order_id, destination_id) -- One allocation per order-destination pair
@@ -103,6 +110,8 @@ CREATE TABLE supplies (
 
 -- Create indexes for better query performance
 CREATE INDEX idx_orders_week_date ON orders(week_date);
+CREATE INDEX idx_orders_ran_out ON orders(ran_out) WHERE ran_out = true;
+CREATE INDEX idx_destinations_display_order ON destinations(display_order);
 CREATE INDEX idx_allocations_order_id ON allocations(order_id);
 CREATE INDEX idx_allocations_destination_id ON allocations(destination_id);
 CREATE INDEX idx_storage_tracking_allocation_id ON storage_tracking(allocation_id);
@@ -142,13 +151,4 @@ CREATE TRIGGER update_custom_items_updated_at BEFORE UPDATE ON custom_items
 CREATE TRIGGER update_supplies_updated_at BEFORE UPDATE ON supplies
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
--- Insert default destinations
-INSERT INTO destinations (code, name, short_name, timing, is_direct, sheet_column_index, display_order) VALUES
-  ('partner_1', 'Partner Group 1', 'Partner Group 1', 'Thursday', false, 5, 1),
-  ('coop_a', 'Co-op A', 'Co-op A', 'Friday', false, 7, 2),
-  ('packOut', 'Pack Out', 'Pack Out', 'Direct', true, -1, 3),
-  ('directGive', 'Direct Give', 'Direct Give', 'Direct', true, -1, 4),
-  ('delivered', 'Delivered', 'Delivered', 'Direct', true, -1, 5),
-  ('cac', 'CAC', 'CAC', 'Saturday', false, -1, 6),
-  ('partner_8', 'Partner Group 8', 'Partner Group 8', 'Sunday', false, -1, 7),
-  ('hp', 'HP', 'HP', 'Monday', false, -1, 8);
+-- Destinations are inserted by supabase/seed-destinations.sql (setup step 6).
