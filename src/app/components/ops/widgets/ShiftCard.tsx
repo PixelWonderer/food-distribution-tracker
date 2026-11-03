@@ -186,9 +186,6 @@ export const ShiftCard: React.FC<ShiftCardProps> = ({
                   {shift.volunteer.display_name}
                   {isMyShift && <span className="text-xs ml-1">(you)</span>}
                 </p>
-                {shift.volunteer.phone && (
-                  <p className="text-xs text-slate-500">{shift.volunteer.phone}</p>
-                )}
               </div>
             </Link>
           </div>

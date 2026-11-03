@@ -32,5 +32,9 @@ GRANT ALL ON ALL TABLES IN SCHEMA public TO anon, authenticated;
 GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated;
 GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO anon, authenticated;
 
+-- Volunteer contact details stay private even in a demo: anon reads only these columns
+REVOKE ALL ON public.volunteers FROM anon, authenticated;
+GRANT SELECT (id, slug, display_name, is_active, created_at, updated_at) ON public.volunteers TO anon, authenticated;
+
 -- Refresh the PostgREST schema cache
 NOTIFY pgrst, 'reload schema';

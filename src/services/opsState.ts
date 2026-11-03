@@ -18,6 +18,9 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { SupabaseService } from './supabaseService';
 import { logger } from '@/lib/logger';
 
+// Anon can read only these volunteer columns; email, phone and notes stay private (see the end of supabase/anon-access.sql)
+const VOLUNTEER_COLUMNS = 'id, slug, display_name, is_active, created_at';
+
 // Use the shared singleton client to avoid "Multiple GoTrueClient instances" warning
 // Cast to untyped SupabaseClient (ops tables aren't in generated DB types)
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -114,7 +117,7 @@ export const useOpsStore = create<OpsState>((set, get) => ({
 
       const { data, error } = await supabase
         .from('volunteers')
-        .select('*')
+        .select(VOLUNTEER_COLUMNS)
         .eq('is_active', true)
         .order('display_name');
 
@@ -201,7 +204,7 @@ export const useOpsStore = create<OpsState>((set, get) => ({
         .from('shift_assignments')
         .select(`
           *,
-          volunteer:volunteers(*)
+          volunteer:volunteers(${VOLUNTEER_COLUMNS})
         `)
         .eq('week_date', week);
 
@@ -481,7 +484,7 @@ export const useOpsStore = create<OpsState>((set, get) => ({
         .from('shift_assignments')
         .select(`
           *,
-          volunteer:volunteers(*)
+          volunteer:volunteers(${VOLUNTEER_COLUMNS})
         `)
         .eq('week_date', weekDate);
 
@@ -700,8 +703,8 @@ export const useOpsStore = create<OpsState>((set, get) => ({
         .from('handoffs')
         .select(`
           *,
-          from_volunteer:volunteers!handoffs_from_volunteer_id_fkey(*),
-          to_volunteer:volunteers!handoffs_to_volunteer_id_fkey(*)
+          from_volunteer:volunteers!handoffs_from_volunteer_id_fkey(${VOLUNTEER_COLUMNS}),
+          to_volunteer:volunteers!handoffs_to_volunteer_id_fkey(${VOLUNTEER_COLUMNS})
         `)
         .eq('week_date', week)
         .order('created_at');

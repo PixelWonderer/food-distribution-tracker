@@ -7,10 +7,7 @@ export interface Volunteer {
   id: string;
   slug: string;
   display_name: string;
-  email?: string;
-  phone?: string;
   is_active: boolean;
-  notes?: string;
   created_at: string;
 }
 

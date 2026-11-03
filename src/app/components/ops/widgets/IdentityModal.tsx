@@ -92,9 +92,6 @@ export const IdentityModal: React.FC = () => {
                 </span>
                 <div className="flex-1">
                   <p className="font-medium text-slate-900">{vol.display_name}</p>
-                  {vol.notes && (
-                    <p className="text-sm text-slate-500 truncate">{vol.notes}</p>
-                  )}
                 </div>
                 <span className="text-slate-300 group-hover:text-emerald-500">
                   →

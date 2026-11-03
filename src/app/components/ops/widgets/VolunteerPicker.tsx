@@ -124,9 +124,6 @@ export const VolunteerPicker: React.FC = () => {
                     >
                       {vol.display_name}
                     </p>
-                    {vol.notes && (
-                      <p className="text-xs text-slate-500 truncate">{vol.notes}</p>
-                    )}
                   </div>
                   {currentVolunteer?.slug === vol.slug && (
                     <span className="text-emerald-600">✓</span>

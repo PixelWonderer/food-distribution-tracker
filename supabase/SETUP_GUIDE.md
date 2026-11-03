@@ -47,11 +47,11 @@ In the Supabase dashboard open **SQL Editor** and run, in order (each file once;
    the tables created by the migrations.
 
 > **Before you put real people in it:** the anon key ships inside the built app, so anyone who loads
-> your site has it. With the demo policies, that means anyone can read and write every table,
-> including `volunteers.email` and `volunteers.phone`. Several RPCs (for example `redirect_item`) are
+> your site has it. With the demo policies, that means anyone can read and write every table
+> (`anon-access.sql` does keep `volunteers.email`, `phone` and `notes` unreadable). Several RPCs (for example `redirect_item`) are
 > `SECURITY DEFINER` and skip RLS entirely. For real use, skip `anon-access.sql`, turn on Supabase
-> Auth, limit writes to signed-in volunteers, keep contact details out of anything anon can read
-> (a view without those columns, or column grants), and revoke `EXECUTE` on the definer functions
+> Auth, limit writes to signed-in volunteers, keep the volunteers column grant from the end of
+> `anon-access.sql`, and revoke `EXECUTE` on the definer functions
 > from `anon`. Making this setup a guided part of the app is a good contribution to pick up.
 10. Optional (public demo): `supabase/seed-demo-week.sql` - a realistic fake weekly order (27 items,
     178 allocations across the 14 destinations, a few Reserve items, sample confirmations, custom

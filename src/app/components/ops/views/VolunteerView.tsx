@@ -104,35 +104,6 @@ const VolunteerView: React.FC = () => {
         )}
       </div>
 
-      {/* Contact info if available */}
-      {(volunteer.phone || volunteer.email) && (
-        <div className="bg-white rounded-xl border border-slate-200 p-4">
-          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">
-            Contact Info
-          </h3>
-          <div className="flex flex-wrap gap-4">
-            {volunteer.phone && (
-              <a
-                href={`tel:${volunteer.phone}`}
-                className="flex items-center gap-2 text-slate-700 hover:text-emerald-600"
-              >
-                <span>📱</span>
-                {volunteer.phone}
-              </a>
-            )}
-            {volunteer.email && (
-              <a
-                href={`mailto:${volunteer.email}`}
-                className="flex items-center gap-2 text-slate-700 hover:text-emerald-600"
-              >
-                <span>✉️</span>
-                {volunteer.email}
-              </a>
-            )}
-          </div>
-        </div>
-      )}
-
       {/* Shifts this week */}
       <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-100 bg-slate-50">
@@ -216,14 +187,6 @@ const VolunteerView: React.FC = () => {
           </Link>
         </div>
       </div>
-
-      {/* Notes */}
-      {volunteer.notes && (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-          <h3 className="text-sm font-semibold text-amber-800 mb-2">Notes</h3>
-          <p className="text-amber-700">{volunteer.notes}</p>
-        </div>
-      )}
 
       {/* Shift action modal */}
       {selectedShift && (
